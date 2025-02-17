@@ -1,71 +1,37 @@
-"""Interactive demo program for testing the calculator functionality."""
-from app.calculator import Calculator
+import sys
+from calculator import Calculator
+from decimal import Decimal, InvalidOperation
 
-def display_menu():
-    """Display the calculator menu."""
-    print("\n=== Calculator Menu ===")
-    print("1. Add")
-    print("2. Subtract")
-    print("3. Multiply")
-    print("4. Divide")
-    print("5. Show last calculation")
-    print("6. Exit")
-    print("====================")
+def calculate_and_print(a, b, operation_name):
+    operation_mappings = {
+        'add': Calculator.add,
+        'subtract': Calculator.subtract,
+        'multiply': Calculator.multiply,
+        'divide': Calculator.divide
+    }
 
-def get_numbers():
-    """Get two numbers from user input."""
+    # Unified error handling for decimal conversion
     try:
-        a = float(input("Enter first number: "))
-        b = float(input("Enter second number: "))
-        return a, b
-    except ValueError:
-        print("Error: Please enter valid numbers!")
-        return None, None
+        a_decimal, b_decimal = map(Decimal, [a, b])
+        result = operation_mappings.get(operation_name) # Use get to handle unknown operations
+        if result:
+            print(f"The result of {a} {operation_name} {b} is equal to {result(a_decimal, b_decimal)}")
+        else:
+            print(f"Unknown operation: {operation_name}")
+    except InvalidOperation:
+        print(f"Invalid number input: {a} or {b} is not a valid number.")
+    except ZeroDivisionError:
+        print("Error: Division by zero.")
+    except Exception as e: # Catch-all for unexpected errors
+        print(f"An error occurred: {e}")
 
 def main():
-    """Main function to run the calculator demo."""
-    calculator = Calculator()
-    print("Welcome to the Calculator!")
+    if len(sys.argv) != 4:
+        print("Usage: python calculator_main.py <number1> <number2> <operation>")
+        sys.exit(1)
 
-    while True:
-        display_menu()
-        choice = input("\nEnter your choice (1-6): ")
+    _, a, b, operation = sys.argv
+    calculate_and_print(a, b, operation)
 
-        if choice == '6':
-            print("Thank you for using the calculator!")
-            break
-
-        if choice == '5':
-            try:
-                operation, operands, result = Calculator.get_last_calculation()
-                print(f"\nLast calculation: {operands[0]} {operation} {operands[1]} = {result}")
-            except ValueError as e:
-                print(f"\nError: {e}")
-            continue
-
-        if choice not in ['1', '2', '3', '4']:
-            print("\nError: Invalid choice! Please try again.")
-            continue
-
-        a, b = get_numbers()
-        if a is None or b is None:
-            continue
-
-        try:
-            if choice == '1':
-                result = calculator.add(a, b)
-                print(f"\nResult: {a} + {b} = {result}")
-            elif choice == '2':
-                result = calculator.subtract(a, b)
-                print(f"\nResult: {a} - {b} = {result}")
-            elif choice == '3':
-                result = calculator.multiply(a, b)
-                print(f"\nResult: {a} * {b} = {result}")
-            elif choice == '4':
-                result = calculator.divide(a, b)
-                print(f"\nResult: {a} / {b} = {result}")
-        except ValueError as e:
-            print(f"\nError: {e}")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
