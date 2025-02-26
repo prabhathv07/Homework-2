@@ -1,15 +1,18 @@
-# calculator/__init__.py
+"""This module provides a simple interface for performing calculations."""
 from decimal import Decimal
 from typing import Callable
-from calculator.calculation import Calculation
-from calculator.calculations import Calculations
-from calculator.operations import add, subtract, multiply, divide
+from .calculation import Calculation
+from .calculations import Calculations
+from .operations import add, subtract, multiply, divide
 
 class Calculator:
     """Provides a simple interface for performing calculations."""
-
     @staticmethod
-    def _perform_operation(a: Decimal, b: Decimal, operation: Callable[[Decimal, Decimal], Decimal]) -> Decimal:
+    def _perform_operation(
+        a: Decimal,
+        b: Decimal,
+        operation: Callable[[Decimal, Decimal], Decimal]
+    ) -> Decimal:
         """Create and perform a calculation, then return the result."""
         calculation = Calculation.create(a, b, operation)
         Calculations.add_calculation(calculation)

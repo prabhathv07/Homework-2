@@ -1,11 +1,9 @@
-# calculator/calculations.py
-from decimal import Decimal
+"""This module defines the Calculations class for managing a history of calculations."""
 from typing import List
 from calculator.calculation import Calculation
 
 class Calculations:
     """Manages a history of Calculation instances."""
-
     history: List[Calculation] = []
 
     @classmethod
@@ -26,11 +24,4 @@ class Calculations:
     @classmethod
     def get_latest(cls) -> Calculation:
         """Get the latest calculation. Returns None if there's no history."""
-        if cls.history:
-            return cls.history[-1]
-        return None
-
-    @classmethod
-    def find_by_operation(cls, operation_name: str) -> List[Calculation]:
-        """Find and return a list of calculations by operation name."""
-        return [calc for calc in cls.history if calc.operation.__name__ == operation_name]
+        return cls.history[-1] if cls.history else None

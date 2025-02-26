@@ -1,29 +1,30 @@
-# Calculator Project
+# Command Pattern and Plugins Homework 5
 
-This is a simple calculator project that performs basic arithmetic operations (addition, subtraction, multiplication, division) using Decimal numbers for precision.
+This project is an interactive command-line calculator application that demonstrates the use of the **command pattern**, **REPL (Read-Evaluate-Print-Loop)**, and a **plugin architecture**. It allows users to perform basic arithmetic operations (addition, subtraction, multiplication, and division) interactively and supports dynamic loading of new commands via plugins.
+
+---
 
 ## Features
 
-- Perform arithmetic operations with high precision.
-- Maintain a history of calculations.
-- Generate test data using Faker.
-- Handle user input with exception handling.
+1. **Command Pattern**:
 
-## Installation
+   - Each arithmetic operation (`add`, `subtract`, `multiply`, `divide`) is implemented as a command class.
+   - Commands are registered in a central command registry and executed dynamically.
 
-1. Clone the repository.
-2. Create a virtual environment: `python -m venv venv`.
-3. Activate the virtual environment:
-   - On Windows: `venv\Scripts\activate`
-   - On macOS/Linux: `source venv/bin/activate`
-4. Install dependencies: `pip install -r requirements.txt`.
+2. **REPL (Read-Evaluate-Print-Loop)**:
 
-## Usage
+   - The application runs interactively, allowing users to input commands repeatedly.
+   - Handles invalid inputs gracefully (e.g., division by zero, non-numeric inputs).
 
-- Run the calculator: `python main.py <number1> <number2> <operation>`.
-- Run tests: `pytest`.
+3. **Plugin Architecture**:
 
-## Testing
+   - New commands can be added dynamically by placing them in the `plugins/` folder.
+   - The application automatically loads plugins at startup.
 
-- Generate test data: `pytest --num_records=100`.
-- Run all tests: `pytest`.
+4. **Bonus Features**:
+   - **Menu Command**: Displays a list of available commands.
+   - **Multiprocessing (Optional)**: Supports parallel execution of commands using Python's `multiprocessing` module.
+
+---
+
+## Project Structure

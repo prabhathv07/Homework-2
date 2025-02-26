@@ -1,19 +1,23 @@
-# tests/test_calculation.py
+"""This module contains tests for the Calculation class."""
 from decimal import Decimal
 import pytest
 from calculator.calculation import Calculation
-from calculator.operations import add, subtract, multiply, divide
+from calculator.operations import add, divide
 
 def test_calculation_operations(a, b, operation, expected):
     """Test calculation operations."""
     calc = Calculation(a, b, operation)
-    assert calc.perform() == expected, f"Failed {operation.__name__} operation with {a} and {b}"
+    assert calc.perform() == expected, (
+        f"Failed {operation.__name__} operation with {a} and {b}"
+    )
 
 def test_calculation_repr():
     """Test the string representation of a calculation."""
     calc = Calculation(Decimal('10'), Decimal('5'), add)
     expected_repr = "Calculation(10, 5, add)"
-    assert repr(calc) == expected_repr, "The __repr__ method output does not match the expected string."
+    assert repr(calc) == expected_repr, (
+        "The __repr__ method output does not match the expected string."
+    )
 
 def test_divide_by_zero():
     """Test division by zero."""
