@@ -1,0 +1,7 @@
+[MESSAGES CONTROL]
+disable=
+    cyclic-import,
+    too-few-public-methods,
+     missing-module-docstring
+[FORMAT]
+max-line-length=120

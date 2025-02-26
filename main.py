@@ -1,71 +1,76 @@
-"""Interactive demo program for testing the calculator functionality."""
-from app.calculator import Calculator
+# main.py
+import sys
+from decimal import Decimal, InvalidOperation
+from app.commands import AddCommand, SubtractCommand, MultiplyCommand, DivideCommand
+import importlib
+import os
 
-def display_menu():
-    """Display the calculator menu."""
-    print("\n=== Calculator Menu ===")
-    print("1. Add")
-    print("2. Subtract")
-    print("3. Multiply")
-    print("4. Divide")
-    print("5. Show last calculation")
-    print("6. Exit")
-    print("====================")
+# Command registry
+commands = {
+    'add': AddCommand(),
+    'subtract': SubtractCommand(),
+    'multiply': MultiplyCommand(),
+    'divide': DivideCommand()
+}
 
-def get_numbers():
-    """Get two numbers from user input."""
+def load_plugins():
+    """Dynamically load commands from the plugins folder."""
+    plugins_dir = "plugins"
+    for filename in os.listdir(plugins_dir):
+        if filename.endswith(".py") and not filename.startswith("__"):
+            module_name = filename[:-3]
+            module = importlib.import_module(f"{plugins_dir}.{module_name}")
+            for attr in dir(module):
+                if attr.endswith("Command"):
+                    command_class = getattr(module, attr)
+                    commands[module_name] = command_class()
+
+def calculate_and_print(a: str, b: str, operation_name: str):
+    """Perform a calculation and print the result."""
     try:
-        a = float(input("Enter first number: "))
-        b = float(input("Enter second number: "))
-        return a, b
-    except ValueError:
-        print("Error: Please enter valid numbers!")
-        return None, None
+        a_decimal = Decimal(a)
+        b_decimal = Decimal(b)
+        operation = commands.get(operation_name)
+        if operation:
+            result = operation.execute(a_decimal, b_decimal)
+            print(f"The result of {a} {operation_name} {b} is equal to {result}")
+        else:
+            print(f"Unknown operation: {operation_name}")
+    except InvalidOperation:
+        print(f"Invalid number input: {a} or {b} is not a valid number.")
+    except ZeroDivisionError:
+        print("An error occurred: Cannot divide by zero.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def repl():
+    """Read-Evaluate-Print-Loop for the calculator."""
+    print("Welcome to the Calculator REPL. Type 'menu' for available commands.")
+    while True:
+        user_input = input("> ").strip().lower()
+        if user_input == "exit":
+            break
+        elif user_input == "menu":
+            print("Available commands:")
+            for cmd in commands:
+                print(f"- {cmd}")
+        elif user_input in commands:
+            try:
+                a = Decimal(input("Enter first number: "))
+                b = Decimal(input("Enter second number: "))
+                result = commands[user_input].execute(a, b)
+                print(f"Result: {result}")
+            except InvalidOperation:
+                print("Invalid input. Please enter valid numbers.")
+            except ValueError as e:
+                print(f"Error: {e}")
+        else:
+            print("Unknown command. Type 'menu' for available commands.")
 
 def main():
-    """Main function to run the calculator demo."""
-    calculator = Calculator()
-    print("Welcome to the Calculator!")
+    """Entry point for the program."""
+    load_plugins()
+    repl()
 
-    while True:
-        display_menu()
-        choice = input("\nEnter your choice (1-6): ")
-
-        if choice == '6':
-            print("Thank you for using the calculator!")
-            break
-
-        if choice == '5':
-            try:
-                operation, operands, result = Calculator.get_last_calculation()
-                print(f"\nLast calculation: {operands[0]} {operation} {operands[1]} = {result}")
-            except ValueError as e:
-                print(f"\nError: {e}")
-            continue
-
-        if choice not in ['1', '2', '3', '4']:
-            print("\nError: Invalid choice! Please try again.")
-            continue
-
-        a, b = get_numbers()
-        if a is None or b is None:
-            continue
-
-        try:
-            if choice == '1':
-                result = calculator.add(a, b)
-                print(f"\nResult: {a} + {b} = {result}")
-            elif choice == '2':
-                result = calculator.subtract(a, b)
-                print(f"\nResult: {a} - {b} = {result}")
-            elif choice == '3':
-                result = calculator.multiply(a, b)
-                print(f"\nResult: {a} * {b} = {result}")
-            elif choice == '4':
-                result = calculator.divide(a, b)
-                print(f"\nResult: {a} / {b} = {result}")
-        except ValueError as e:
-            print(f"\nError: {e}")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
