@@ -1,7 +1,14 @@
+[MASTER]
+# Add files or directories to the blacklist. They should be base names.
+ignore=venv
+
 [MESSAGES CONTROL]
+# Disable specific pylint messages.
 disable=
-    cyclic-import,
+    missing-docstring,
     too-few-public-methods,
-     missing-module-docstring
+    invalid-name
+
 [FORMAT]
+# Set the maximum line length.
 max-line-length=120

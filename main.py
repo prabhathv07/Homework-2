@@ -57,9 +57,9 @@ def calculate_and_print(first_number: str, second_number: str, operation_name: s
         if operation:
             result = operation.execute(a_decimal, b_decimal)
             logger.info(
-    "Performed %s operation: %s %s %s = %s",
-    operation_name, first_number, operation_name, second_number, result
+    f"Performed {operation_name} operation: {first_number} {operation_name} {second_number} = {result}"
 )
+
 
             print(f"The result of {first_number} {operation_name} {second_number} is equal to {result}")
         else:
