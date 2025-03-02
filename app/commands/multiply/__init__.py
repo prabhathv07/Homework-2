@@ -1,4 +1,3 @@
-# app/commands/multiply/__init__.py
 """This module defines the MultiplyCommand class for performing multiplication."""
 from decimal import Decimal
 from app.commands.command import Command

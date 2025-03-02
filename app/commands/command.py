@@ -1,4 +1,4 @@
-# app/commands/command.py
+"""This module defines the base Command class."""
 from abc import ABC, abstractmethod
 from decimal import Decimal
 
@@ -7,3 +7,4 @@ class Command(ABC):
     @abstractmethod
     def execute(self, a: Decimal, b: Decimal) -> Decimal:
         """Execute the command with the given operands."""
+        pass

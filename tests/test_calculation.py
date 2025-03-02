@@ -4,11 +4,11 @@ import pytest
 from calculator.calculation import Calculation
 from calculator.operations import add, divide
 
-def test_calculation_operations(a, b, operation, expected):
+def test_calculation_operations(num1, num2, operation, expected):
     """Test calculation operations."""
-    calc = Calculation(a, b, operation)
+    calc = Calculation(num1, num2, operation)
     assert calc.perform() == expected, (
-        f"Failed {operation.__name__} operation with {a} and {b}"
+        f"Failed {operation.__name__} operation with {num1} and {num2}"
     )
 
 def test_calculation_repr():

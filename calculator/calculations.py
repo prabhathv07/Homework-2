@@ -25,3 +25,8 @@ class Calculations:
     def get_latest(cls) -> Calculation:
         """Get the latest calculation. Returns None if there's no history."""
         return cls.history[-1] if cls.history else None
+
+    @classmethod
+    def find_by_operation(cls, operation: str) -> List[Calculation]:
+        """Find calculations in the history by operation type."""
+        return [calc for calc in cls.history if calc.operation.__name__ == operation]
